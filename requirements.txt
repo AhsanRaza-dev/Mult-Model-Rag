@@ -1,0 +1,26 @@
+# Core RAG dependencies
+llama-index-core
+llama-index-vector-stores-qdrant
+llama-index-embeddings-huggingface
+qdrant-client
+python-dotenv
+
+# OCR dependencies
+pytesseract
+pillow
+pdf2image
+pymupdf
+
+# Embeddings
+sentence-transformers
+torch
+
+# Gemini API
+google-genai
+
+# FastAPI Backend
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+python-multipart
