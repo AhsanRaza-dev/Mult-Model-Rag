@@ -5,6 +5,7 @@ Machinery repair assistant with RAG
 import streamlit as st
 import requests
 import time
+from PIL import Image
 
 # Page configuration
 st.set_page_config(
@@ -98,105 +99,158 @@ if 'query_history' not in st.session_state:
 # Main query interface
 st.subheader("💬 Ask a Question")
 
-query = st.text_area(
-    "Enter your question about machinery repair:",
-    value=st.session_state.query_text,
-    placeholder="Example: How do I replace the brake pads?",
-    height=100,
-    key="query_input"
-)
+tab1, tab2 = st.tabs(["📝 Text Query", "📷 Image Analysis"])
 
-col1, col2, col3 = st.columns([2, 1, 1])
-with col1:
-    submit_button = st.button("🔍 Ask Question", type="primary", use_container_width=True)
-with col2:
-    top_k = st.number_input("Results", min_value=1, max_value=10, value=3, label_visibility="collapsed")
-with col3:
-    clear_button = st.button("🗑️ Clear", use_container_width=True)
+# --- TAB 1: TEXT QUERY ---
+with tab1:
+    query = st.text_area(
+        "Enter your question about machinery repair:",
+        value=st.session_state.query_text,
+        placeholder="Example: How do I replace the brake pads?",
+        height=100,
+        key="query_input"
+    )
 
-if clear_button:
-    st.session_state.query_text = ""
-    st.rerun()
+    col1, col2, col3 = st.columns([2, 1, 1])
+    with col1:
+        submit_button = st.button("🔍 Ask Question", type="primary", use_container_width=True)
+    with col2:
+        top_k = st.number_input("Results", min_value=1, max_value=10, value=3, label_visibility="collapsed", key="top_k_text")
+    with col3:
+        clear_button = st.button("🗑️ Clear", use_container_width=True)
 
-# Process query
-if submit_button and query.strip():
-    st.info("⏳ Query processing... First query may take 10-15s (model loading). Subsequent queries will be faster.")
-    start_time = time.time()
-    
-    with st.spinner("🔍 Searching knowledge base..."):
-        try:
-            response = requests.post(
-                f"{API_URL}/query/text",
-                json={"query": query, "top_k": top_k},
-                timeout=60  # Increased timeout for longer queries
-            )
-            
-            elapsed_time = time.time() - start_time
-            
-            if response.status_code == 200:
-                result = response.json()
+    if clear_button:
+        st.session_state.query_text = ""
+        st.rerun()
+
+    # Process Text Query
+    if submit_button and query.strip():
+        st.info("⏳ Query processing... First query may take 10-15s (model loading).")
+        start_time = time.time()
+        
+        with st.spinner("🔍 Searching knowledge base..."):
+            try:
+                response = requests.post(
+                    f"{API_URL}/query/text",
+                    json={"query": query, "top_k": top_k},
+                    timeout=60
+                )
                 
-                if result.get("success"):
-                    # Add to history
-                    st.session_state.query_history.insert(0, {
-                        "query": query,
-                        "answer": result["answer"],
-                        "citations": result["citations"],
-                        "time": elapsed_time
-                    })
-                    
-                    # Display answer
-                    st.success(f"✅ Answer generated in {elapsed_time:.2f}s")
-                    
-                    st.subheader("📖 Answer")
-                    st.markdown(result["answer"])
-                    
-                    # Display citations
-                    st.subheader("📚 Sources")
-                    st.caption(f"Retrieved {result.get('context_used', 0)} relevant sections")
-                    
-                    for i, citation in enumerate(result.get("citations", []), 1):
-                        with st.container():
-                            st.markdown(f"""
-                            <div class="citation-box">
-                                <strong>📄 Source {i}</strong><br>
-                                Page: <code>{citation['page']}</code> | 
-                                File: <code>{citation['file']}</code> | 
-                                Relevance: <strong>{citation['score']:.2%}</strong>
-                            </div>
-                            """, unsafe_allow_html=True)
-                    
-                    # Copy button
-                    st.divider()
-                    if st.button("📋 Copy Answer to Clipboard"):
-                        st.code(result["answer"], language=None)
-                        st.info("Answer displayed above - copy manually")
+                elapsed_time = time.time() - start_time
+                
+                if response.status_code == 200:
+                    result = response.json()
+                    if result.get("success"):
+                        # Add to history
+                        st.session_state.query_history.insert(0, {
+                            "query": query,
+                            "answer": result["answer"],
+                            "citations": result["citations"],
+                            "time": elapsed_time
+                        })
+                        
+                        # Display results
+                        st.success(f"✅ Answer generated in {elapsed_time:.2f}s")
+                        
+                        st.subheader("📖 Answer")
+                        st.markdown(result["answer"])
+                        
+                        st.subheader("📚 Sources")
+                        for i, citation in enumerate(result.get("citations", []), 1):
+                            with st.container():
+                                st.markdown(f"""
+                                <div class="citation-box">
+                                    <strong>📄 Source {i}</strong><br>
+                                    Page: <code>{citation['page']}</code> | 
+                                    File: <code>{citation['file']}</code> | 
+                                    Relevance: <strong>{citation['score']:.2%}</strong>
+                                </div>
+                                """, unsafe_allow_html=True)
+                    else:
+                        st.error(f"❌ Error: {result.get('error')}")
                 else:
-                    st.error(f"❌ Error: {result.get('error', 'Unknown error')}")
-            else:
-                st.error(f"❌ HTTP Error {response.status_code}: {response.text}")
-                
-        except requests.exceptions.Timeout:
-            st.error("⏱️ Request timed out. The query is taking too long.")
-        except requests.exceptions.ConnectionError:
-            st.error("🔌 Cannot connect to backend. Make sure it's running on port 8000.")
-        except Exception as e:
-            st.error(f"❌ Unexpected error: {str(e)}")
+                    st.error(f"❌ HTTP Error {response.status_code}: {response.text}")
+            except Exception as e:
+                st.error(f"❌ Error: {str(e)}")
 
-elif submit_button:
-    st.warning("⚠️ Please enter a question first")
+# --- TAB 2: IMAGE QUERY ---
+with tab2:
+    uploaded_file = st.file_uploader("Upload an image of machinery/parts", type=["jpg", "jpeg", "png"])
+    
+    if uploaded_file:
+        col_img, col_opts = st.columns([1, 2])
+        with col_img:
+            image = Image.open(uploaded_file)
+            st.image(image, caption="Uploaded Image", use_container_width=True)
+        
+        with col_opts:
+            image_query_text = st.text_input("Optional question about the image:", placeholder="What is this part and how do I fix it?")
+            top_k_image = st.number_input("Results", min_value=1, max_value=10, value=3, key="top_k_image")
+            analyze_button = st.button("🔍 Analyze Image", type="primary")
 
-# Query history
+        if analyze_button:
+            st.info("⏳ Analyzing image and searching (this may take 20-30s)...")
+            start_time = time.time()
+            
+            with st.spinner("🤖 Analyzing image with Gemini Vision..."):
+                try:
+                    # Prepare multipart upload
+                    files = {"image": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)}
+                    data = {"top_k": top_k_image}
+                    if image_query_text:
+                        data["query"] = image_query_text
+                    
+                    response = requests.post(
+                        f"{API_URL}/query/image",
+                        files=files,
+                        data=data,
+                        timeout=90 # Longer timeout for image analysis
+                    )
+                    
+                    elapsed_time = time.time() - start_time
+                    
+                    if response.status_code == 200:
+                        result = response.json()
+                        if result.get("success"):
+                            st.success(f"✅ Analysis complete in {elapsed_time:.2f}s")
+                            
+                            # Display Analysis
+                            if result.get("image_analysis"):
+                                with st.expander("👁️ Image Analysis Details", expanded=True):
+                                    st.markdown(result["image_analysis"])
+                            
+                            # Display Answer
+                            st.subheader("📖 Diagnosis & Recommendation")
+                            st.markdown(result["answer"])
+                            
+                            # Display Citations
+                            st.subheader("📚 Relevant Manual Sections")
+                            for i, citation in enumerate(result.get("citations", []), 1):
+                                with st.container():
+                                    st.markdown(f"""
+                                    <div class="citation-box">
+                                        <strong>📄 Source {i}</strong><br>
+                                        Page: <code>{citation['page']}</code> | 
+                                        Relevance: <strong>{citation['score']:.2%}</strong>
+                                    </div>
+                                    """, unsafe_allow_html=True)
+                        else:
+                            st.error(f"❌ Error: {result.get('error')}")
+                    else:
+                        st.error(f"❌ HTTP Error {response.status_code}: {response.text}")
+                except Exception as e:
+                    st.error(f"❌ Error: {str(e)}")
+
+# Query history (Shared)
 if st.session_state.query_history:
     st.divider()
     st.subheader("📜 Query History")
-    
     for i, item in enumerate(st.session_state.query_history[:5], 1):
-        with st.expander(f"Query {i}: {item['query'][:50]}..."):
-            st.markdown(f"**Question:** {item['query']}")
+        with st.expander(f"Query {i}: {item.get('query', 'Image Query')[:50]}..."):
+            st.markdown(f"**Question:** {item.get('query', 'Image Query')}")
             st.markdown(f"**Answer:** {item['answer'][:200]}...")
-            st.caption(f"Response time: {item['time']:.2f}s | Sources: {len(item['citations'])}")
+            st.caption(f"Response time: {item['time']:.2f}s")
 
 # Footer
 st.divider()
-st.caption("FixIt.AI v1.0 | Powered by Gemini 3.0 Flash & RAG")
+st.caption("FixIt.AI v1.1 | Powered by Gemini 3.0 Flash & RAG")
