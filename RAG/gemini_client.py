@@ -64,6 +64,47 @@ Format your response clearly with numbered sections."""
                 "error": str(e),
                 "image_path": image_path
             }
+
+    def check_image_relevance(self, image_path: str) -> Dict:
+        """
+        Check if the image is relevant to machinery/equipment repair.
+        
+        Args:
+            image_path: Path to image file
+            
+        Returns:
+            Dict with is_relevant (bool) and reason (str)
+        """
+        try:
+            img = Image.open(image_path)
+            
+            prompt = """Analyze this image and determine if it shows machinery, equipment, tools, or technical diagrams relevant to repair/maintenance.
+Answer with a JSON object:
+{
+  "is_relevant": true/false,
+  "reason": "Brief explanation why"
+}
+Only output the JSON."""
+            
+            response = self.client.models.generate_content(
+                model=self.model_id,
+                contents=[prompt, img],
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json"
+                )
+            )
+            
+            import json
+            result = json.loads(response.text)
+            return result
+            
+        except Exception as e:
+            # On error, default to allowing (fail open) or blocking (fail safe)
+            # Here we'll fail open with a warning
+            return {
+                "is_relevant": True,
+                "reason": f"Relevance check failed: {str(e)}"
+            }
     
     def enhance_query(self, image_analysis: str, user_query: Optional[str] = None) -> str:
         """

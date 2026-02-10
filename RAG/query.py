@@ -55,6 +55,17 @@ class QuerySystem:
         # Step 1: Analyze image if provided
         if image_path:
             print(f"\nAnalyzing image: {image_path}")
+            
+            # Guardrail: Check relevance
+            print("Checking image relevance...")
+            relevance = self.gemini.check_image_relevance(image_path)
+            if not relevance.get("is_relevant", True):
+                return {
+                    "success": False,
+                    "error": f"Image Rejected: {relevance.get('reason', 'Image is not relevant to machinery repair')}"
+                }
+            print("Image is relevant.")
+            
             analysis_result = self.gemini.analyze_image(image_path)
             
             if not analysis_result["success"]:
@@ -101,6 +112,10 @@ class QuerySystem:
         
         # Add search query to result
         result["search_query"] = search_query
+        
+        # Add source contexts for evaluation (Ragas)
+        result["source_contexts"] = [ctx.get('text', '') for ctx in context]
+        
         if image_analysis:
             result["image_analysis"] = image_analysis
         
