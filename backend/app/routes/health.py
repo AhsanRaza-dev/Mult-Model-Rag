@@ -9,7 +9,7 @@ rag_path = Path(__file__).parent.parent.parent.parent / "RAG"
 sys.path.insert(0, str(rag_path))
 
 from fastapi import APIRouter, HTTPException
-from app.models import HealthResponse, StatsResponse
+from ..models import HealthResponse, StatsResponse
 from rag_pipeline import RAGPipeline
 
 router = APIRouter()

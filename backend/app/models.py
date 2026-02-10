@@ -22,6 +22,7 @@ class QueryResponse(BaseModel):
     citations: List[Citation] = Field(..., description="Source citations")
     context_used: int = Field(..., description="Number of context chunks used")
     search_query: Optional[str] = Field(None, description="Enhanced search query (if applicable)")
+    image_analysis: Optional[str] = Field(None, description="Detailed image analysis from Gemini (for image queries)")
 
 class ErrorResponse(BaseModel):
     """Error response model."""

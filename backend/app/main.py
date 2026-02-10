@@ -3,7 +3,7 @@ FastAPI application for FixIt.AI machinery repair assistant.
 """
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import query, health
+from .routes import query, health
 
 # Create FastAPI app
 app = FastAPI(
