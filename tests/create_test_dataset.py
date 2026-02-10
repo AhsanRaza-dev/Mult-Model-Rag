@@ -1,0 +1,34 @@
+import json
+
+TEST_DATASET = [
+    {
+        "question": "How do I replace the brake pads?",
+        "ground_truth": "To replace the brake pads, first raise the vehicle and remove the wheel. Then remove the caliper bolts (8 x 1.0 mm) and lift off the caliper. Remove the old pads and install new ones. tighten the caliper bolts to 23 N·m.",
+        "contexts": ["To replace the brake pads: 1. Raise vehicle... 2. Remove caliper bolts... Torque: 23 N·m"] 
+    },
+    {
+        "question": "What are the torque specifications for the wheel bolts?",
+        "ground_truth": "The torque specification for the wheel bolts is 108 N·m (80 ft-lb).",
+        "contexts": ["Wheel bolt torque: 108 N·m (80 ft-lb)"]
+    },
+    {
+        "question": "How do I check the oil level?",
+        "ground_truth": "To check the oil level: 1. Park on level ground. 2. Wait for engine to cool. 3. Remove dipstick and wipe clean. 4. Reinsert dipstick and check level. It should be between MIN and MAX marks.",
+        "contexts": ["Checking oil level: ... between MIN and MAX marks"]
+    },
+    {
+        "question": "What kind of oil should I use?",
+        "ground_truth": "Use API Service SJ or later, SAE 10W-30 or 10W-40.",
+        "contexts": ["Recommended oil: API Service SJ... SAE 10W-30"]
+    },
+    {
+        "question": "How often should I change the air filter?",
+        "ground_truth": "The air filter should be inspected every 6 months or 6,000 km, and replaced every 12 months or 12,000 km.",
+        "contexts": ["Air cleaner element: Inspect every 6 mo... Replace every 12 mo"]
+    }
+]
+
+if __name__ == "__main__":
+    with open("test_dataset.json", "w") as f:
+        json.dump(TEST_DATASET, f, indent=2)
+    print("Created test_dataset.json")
