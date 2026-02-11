@@ -1,0 +1,193 @@
+﻿
+Collecting usage statistics. To deactivate, set browser.gatherUsageStats to false.
+
+
+  You can now view your Streamlit app in your browser.
+
+  Local URL: http://localhost:8501
+  Network URL: http://172.17.0.2:8501
+  External URL: http://39.63.56.238:8501
+
+Γ¥î Failed to initialize query system: Missing key inputs argument! To use the Google AI API, provide (`api_key`) arguments. To use the Google Cloud API, provide (`vertexai`, `project` & `location`) arguments.
+docker : Task 
+exception was never 
+retrieved
+At line:1 char:1
++ docker logs 
+3bca8c7bbfa9 2>&1 | 
+Out-File logs.txt 
+-Encoding utf8
++ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~
+    + CategoryInfo    
+          : 
+NotSpecified: (Tas    
+k exception was never 
+    retrieved:String) 
+[],     
+RemoteException
+    + 
+FullyQualifiedErrorI  
+  d : 
+NativeCommandError
+ 
+future: <Task 
+finished 
+name='Task-2' coro=<Ba
+seApiClient.aclose() 
+done, defined at /usr/
+local/lib/python3.10/s
+ite-packages/google/ge
+nai/_api_client.py:190
+0> exception=Attribute
+Error("'BaseApiClient'
+ object has no 
+attribute '_async_http
+x_client'")>
+Traceback (most 
+recent call last):
+  File "/usr/local/lib
+/python3.10/site-packa
+ges/google/genai/_api_
+client.py", line 
+1905, in aclose
+    await self._async_
+httpx_client.aclose()
+AttributeError: 
+'BaseApiClient' 
+object has no 
+attribute 
+'_async_httpx_client'
+Traceback (most 
+recent call last):
+  File "/usr/local/bin
+/uvicorn", line 8, in 
+<module>
+    sys.exit(main())
+  File "/usr/local/lib
+/python3.10/site-packa
+ges/click/core.py", 
+line 1485, in __call__
+    return 
+self.main(*args, 
+**kwargs)
+  File "/usr/local/lib
+/python3.10/site-packa
+ges/click/core.py", 
+line 1406, in main
+    rv = 
+self.invoke(ctx)
+  File "/usr/local/lib
+/python3.10/site-packa
+ges/click/core.py", 
+line 1269, in invoke
+    return ctx.invoke(
+self.callback, 
+**ctx.params)
+  File "/usr/local/lib
+/python3.10/site-packa
+ges/click/core.py", 
+line 824, in invoke
+    return 
+callback(*args, 
+**kwargs)
+  File "/usr/local/lib
+/python3.10/site-packa
+ges/uvicorn/main.py", 
+line 424, in main
+    run(
+  File "/usr/local/lib
+/python3.10/site-packa
+ges/uvicorn/main.py", 
+line 594, in run
+    server.run()
+  File "/usr/local/lib
+/python3.10/site-packa
+ges/uvicorn/server.py"
+, line 67, in run
+    return asyncio_run
+(self.serve(sockets=so
+ckets), loop_factory=s
+elf.config.get_loop_fa
+ctory())
+  File "/usr/local/lib
+/python3.10/site-packa
+ges/uvicorn/_compat.py
+", line 60, in 
+asyncio_run
+    return loop.run_un
+til_complete(main)
+  File 
+"uvloop/loop.pyx", 
+line 1518, in uvloop.l
+oop.Loop.run_until_com
+plete
+  File "/usr/local/lib
+/python3.10/site-packa
+ges/uvicorn/server.py"
+, line 71, in serve
+    await 
+self._serve(sockets)
+  File "/usr/local/lib
+/python3.10/site-packa
+ges/uvicorn/server.py"
+, line 78, in _serve
+    config.load()
+  File "/usr/local/lib
+/python3.10/site-packa
+ges/uvicorn/config.py"
+, line 439, in load
+    self.loaded_app = 
+import_from_string(sel
+f.app)
+  File "/usr/local/lib
+/python3.10/site-packa
+ges/uvicorn/importer.p
+y", line 19, in 
+import_from_string
+    module = importlib
+.import_module(module_
+str)
+  File "/usr/local/lib
+/python3.10/importlib/
+__init__.py", line 
+126, in import_module
+    return _bootstrap.
+_gcd_import(name[level
+:], package, level)
+  File "<frozen import
+lib._bootstrap>", 
+line 1050, in 
+_gcd_import
+  File "<frozen import
+lib._bootstrap>", 
+line 1027, in 
+_find_and_load
+  File "<frozen import
+lib._bootstrap>", 
+line 1006, in _find_an
+d_load_unlocked
+  File "<frozen import
+lib._bootstrap>", 
+line 688, in 
+_load_unlocked
+  File "<frozen import
+lib._bootstrap_externa
+l>", line 883, in 
+exec_module
+  File "<frozen import
+lib._bootstrap>", 
+line 241, in _call_wit
+h_frames_removed
+  File "/app/backend/a
+pp/main.py", line 6, 
+in <module>
+    from .routes 
+import query, health
+  File "/app/backend/a
+pp/routes/query.py", 
+line 85, in <module>
+    image: UploadFile 
+= File(...),
+NameError: name 
+'File' is not defined

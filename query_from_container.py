@@ -8,9 +8,7 @@ from pathlib import Path
 rag_path = Path(__file__).parent.parent.parent.parent / "RAG"
 sys.path.insert(0, str(rag_path))
 
-from fastapi import APIRouter, HTTPException, Form, UploadFile
-from fastapi import File
-from typing import Optional
+from fastapi import APIRouter, HTTPException
 from ..models import TextQueryRequest, QueryResponse, ErrorResponse
 from query import QuerySystem
 
@@ -99,6 +97,8 @@ async def query_image(
     Returns:
         QueryResponse with analysis, answer, and citations
     """
+    from fastapi import File, Form, UploadFile
+    from typing import Optional
     import shutil
     import os
     import tempfile

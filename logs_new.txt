@@ -1,0 +1,169 @@
+﻿
+Collecting usage statistics. To deactivate, set browser.gatherUsageStats to false.
+
+
+  You can now view your Streamlit app in your browser.
+
+  Local URL: http://localhost:8501
+  Network URL: http://172.17.0.2:8501
+  External URL: http://39.63.56.238:8501
+
+Γ¥î Failed to initialize query system: Missing key inputs argument! To use the Google AI API, provide (`api_key`) arguments. To use the Google Cloud API, provide (`vertexai`, `project` & `location`) arguments.
+docker : Task exception 
+was never retrieved
+At line:1 char:1
++ docker logs $(docker ps 
+-lq) 2>&1 | Out-File 
+logs_new.txt -Encoding u 
+...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo         
+     : NotSpecified: (Tas  
+  k exception was never    
+ retrieved:String) [],     
+RemoteException
+    + FullyQualifiedErrorI 
+   d : NativeCommandError
+ 
+future: <Task finished 
+name='Task-2' coro=<BaseApi
+Client.aclose() done, 
+defined at /usr/local/lib/p
+ython3.10/site-packages/goo
+gle/genai/_api_client.py:19
+00> exception=AttributeErro
+r("'BaseApiClient' object 
+has no attribute 
+'_async_httpx_client'")>
+Traceback (most recent 
+call last):
+  File "/usr/local/lib/pyth
+on3.10/site-packages/google
+/genai/_api_client.py", 
+line 1905, in aclose
+    await self._async_httpx
+_client.aclose()
+AttributeError: 
+'BaseApiClient' object has 
+no attribute 
+'_async_httpx_client'
+Traceback (most recent 
+call last):
+  File 
+"/usr/local/bin/uvicorn", 
+line 8, in <module>
+    sys.exit(main())
+  File "/usr/local/lib/pyth
+on3.10/site-packages/click/
+core.py", line 1485, in 
+__call__
+    return 
+self.main(*args, **kwargs)
+  File "/usr/local/lib/pyth
+on3.10/site-packages/click/
+core.py", line 1406, in 
+main
+    rv = self.invoke(ctx)
+  File "/usr/local/lib/pyth
+on3.10/site-packages/click/
+core.py", line 1269, in 
+invoke
+    return 
+ctx.invoke(self.callback, 
+**ctx.params)
+  File "/usr/local/lib/pyth
+on3.10/site-packages/click/
+core.py", line 824, in 
+invoke
+    return callback(*args, 
+**kwargs)
+  File "/usr/local/lib/pyth
+on3.10/site-packages/uvicor
+n/main.py", line 424, in 
+main
+    run(
+  File "/usr/local/lib/pyth
+on3.10/site-packages/uvicor
+n/main.py", line 594, in 
+run
+    server.run()
+  File "/usr/local/lib/pyth
+on3.10/site-packages/uvicor
+n/server.py", line 67, in 
+run
+    return asyncio_run(self
+.serve(sockets=sockets), lo
+op_factory=self.config.get_
+loop_factory())
+  File "/usr/local/lib/pyth
+on3.10/site-packages/uvicor
+n/_compat.py", line 60, in 
+asyncio_run
+    return loop.run_until_c
+omplete(main)
+  File "uvloop/loop.pyx", 
+line 1518, in uvloop.loop.L
+oop.run_until_complete
+  File "/usr/local/lib/pyth
+on3.10/site-packages/uvicor
+n/server.py", line 71, in 
+serve
+    await 
+self._serve(sockets)
+  File "/usr/local/lib/pyth
+on3.10/site-packages/uvicor
+n/server.py", line 78, in 
+_serve
+    config.load()
+  File "/usr/local/lib/pyth
+on3.10/site-packages/uvicor
+n/config.py", line 439, in 
+load
+    self.loaded_app = impor
+t_from_string(self.app)
+  File "/usr/local/lib/pyth
+on3.10/site-packages/uvicor
+n/importer.py", line 19, 
+in import_from_string
+    module = importlib.impo
+rt_module(module_str)
+  File "/usr/local/lib/pyth
+on3.10/importlib/__init__.p
+y", line 126, in 
+import_module
+    return _bootstrap._gcd_
+import(name[level:], 
+package, level)
+  File "<frozen 
+importlib._bootstrap>", 
+line 1050, in _gcd_import
+  File "<frozen 
+importlib._bootstrap>", 
+line 1027, in 
+_find_and_load
+  File "<frozen 
+importlib._bootstrap>", 
+line 1006, in 
+_find_and_load_unlocked
+  File "<frozen 
+importlib._bootstrap>", 
+line 688, in _load_unlocked
+  File "<frozen importlib._
+bootstrap_external>", line 
+883, in exec_module
+  File "<frozen 
+importlib._bootstrap>", 
+line 241, in 
+_call_with_frames_removed
+  File "/app/backend/app/ma
+in.py", line 6, in <module>
+    from .routes import 
+query, health
+  File "/app/backend/app/ro
+utes/query.py", line 85, 
+in <module>
+    image: UploadFile = 
+File(...),
+NameError: name 'File' is 
+not defined
